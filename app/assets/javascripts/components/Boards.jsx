@@ -44,6 +44,7 @@ class Boards extends React.Component {
         <div>
           <h3>{this.state.board.name}</h3>
           <i>{this.state.board.description}</i>
+          <br />
           <button className='btn' onClick={this.boardBack.bind(this)}>Back</button>
           <hr />
           <Lists boardId={this.state.board.id} />

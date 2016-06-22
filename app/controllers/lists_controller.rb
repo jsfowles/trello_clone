@@ -13,6 +13,11 @@ class ListsController < ApplicationController
     end
   end
 
+  def destroy
+    @board.lists.find(params[:id]).destroy
+    render json: {message: 'list deleted'}
+  end
+
   private
   def find_board
     @board = Board.find(params[:board_id])
