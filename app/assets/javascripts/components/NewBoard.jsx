@@ -23,7 +23,7 @@ class NewBoard extends React.Component {
 
     render() {
         return(
-            <div className='col s12 m10 offset-m1'>
+            <div className='col s12 m8 offset-m1'>
               <h4>Add New Board</h4>
               <form ref='addForm' onSubmit={this.addBoard.bind(this)}>
                 <input type='text' placeholder='Board Name' ref='name' required />

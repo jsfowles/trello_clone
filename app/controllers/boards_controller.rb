@@ -3,6 +3,10 @@ class BoardsController < ApplicationController
     @boards = Board.all
   end
 
+  def show
+    
+  end
+
   def create
     @board = Board.create(board_params)
     if @board.save
@@ -10,6 +14,12 @@ class BoardsController < ApplicationController
     else
       render json:{errors: @board.error.full_messages}
     end
+  end
+
+  def destroy
+    @board = Board.find(params[:id])
+    @board.destroy
+    render json: {message: 'Board Deleted'}
   end
 
   private

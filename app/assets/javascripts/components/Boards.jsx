@@ -1,23 +1,68 @@
 class Boards extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {boards: props.boards};
-    }
+  constructor(props) {
+    super(props);
+    this.state = {boards: props.boards, show: false};
+    this.deleteBoard = this.deleteBoard.bind(this);
+    this.showBoard = this.showBoard.bind(this);
+  }
 
-    addBoard(board) {
-      this.setState({ boards: [{...board}, ...this.state.boards] });
-    }
+  showBoard(board) {
+    this.setState({ show: true, board })
+  }
 
-    render() {
+  addBoard(board) {
+    this.setState({ boards: [{...board}, ...this.state.boards] });
+  }
+
+  deleteBoard(id) {
+    $.ajax({
+      url: `/boards/${id}`,
+      type: 'DELETE',
+      dateType: 'JSON'
+    }).done( data => {
+      let boards = this.state.boards;
+      let index = boards.findIndex( b => b.id === id);
+      this.setState({
+        boards: [
+          ...boards.slice(0, index),
+          ...boards.slice(index + 1, boards.length)
+        ]
+      });
+    }).fail( data => {
+      alert('Board did not delete.');
+    });
+  }
+
+  boardBack() {
+    this.setState({ show: false});
+  }
+
+  render() {
+    if(this.state.show) {
+      // render the show html
+      return(
+        <div>
+          <h3>{this.state.board.name}</h3>
+          <i>{this.state.board.description}</i>
+          <button className='btn' onClick={this.boardBack.bind(this)}>Back</button>
+          <hr />
+        </div>
+        )
+      } else {
         let boards = this.state.boards.map( board => {
-            return(<Board key={`board-${board.id}`} {...board} />);
-        });
+          return(<Board key={`board-${board.id}`} {...board}
+            deleteBoard={this.deleteBoard}
+            showBoard={this.showBoard}/>);
+          });
 
-        return(
+          return(
             <div>
               <NewBoard addBoard={this.addBoard.bind(this)} />
-              {boards}
+              <div className='row'>
+                {boards}
+              </div>
             </div>
-        )
+          )
+        }
+      }
     }
-}
